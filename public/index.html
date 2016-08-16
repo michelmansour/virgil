@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PoemShare</title>
+    <!-- Not present in the tutorial. Just for basic styling. -->
+    <link rel="stylesheet" href="css/base.css" />
+    <script src="https://npmcdn.com/react@15.3.0/dist/react.js"></script>
+    <script src="https://npmcdn.com/react-dom@15.3.0/dist/react-dom.js"></script>
+    <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+    <script src="https://npmcdn.com/jquery@3.1.0/dist/jquery.min.js"></script>
+    <script src="https://npmcdn.com/remarkable@1.6.2/dist/remarkable.min.js"></script>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script type="text/babel">
+      var Poem = React.createClass({
+        render: function () {
+          return (
+            <div className="poem">
+              <h2 className="poemTitle">
+                {this.props.title}
+              </h2>
+            </div>
+          )
+        }
+      });
+      var PoemList = React.createClass({
+        render: function () {
+          var poemNodes = this.props.data.map(function (poem) {
+            return (
+              <Poem title={poem.title} key={poem.id} />
+            );
+          });
+          return (
+            <div className="poemList">
+              {poemNodes}
+            </div>
+          );
+        }
+      });
+      var data = [
+        {id: 1, title: 'foo', author: 'a'},
+        {id: 2, title: 'bar', author: 'b'}
+      ];
+      var PoemBox = React.createClass({
+        getInitialState: function () {
+          return {data: []};
+        },
+        loadPoems: function () {
+          $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+              this.setState({data: data});
+            }.bind(this),
+            error: function (xhr, status, err) {
+              console.error(this.props.url, status, err.toString());
+            }.bind(this)
+          })
+        },
+        componentDidMount: function () {
+          this.loadPoems();
+          setInterval(this.loadPoems, this.props.pollInterval);
+        },
+        render: function () {
+          return (
+            <div className="poemBox">
+              <h1>Poem List</h1>
+              <PoemList data={this.state.data} />
+            </div>
+          );
+        }
+      });
+      ReactDOM.render(
+        <PoemBox url="/api/poem" pollInterval={2000} />,
+        document.getElementById('content')
+      );
+    </script>
+  </body>
+</html>
