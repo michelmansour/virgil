@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "title": "Poem A",
+    "author": "Foo Bar",
+    "collection": "Leaves of Trees"
+  },
+  {
+    "id": 2,
+    "title": "The Modern Magus",
+    "author": "Bobby Arnold",
+    "collection": "Where the Sidewalk Starts"
+  }
+]

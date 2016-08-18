@@ -1,7 +1,10 @@
+var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
+
+var POEMS_FILE = path.join(__dirname, 'poems.json');
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -11,19 +14,13 @@ app.get('/', function (req, res) {
 });
 
 app.get('/api/poem', function (req, res) {
-  res.json([
-      {
-        id: 1,
-        title: 'Poem A',
-        author: 'Foo Bar',
-        collection: 'Leaves of Trees'
-      }, {
-        id: 2,
-        title: 'Poem B',
-        author: 'Bobby Arnold',
-        collection: 'Where the Sidewalk Starts'
-      }
-    ]);
+  fs.readFile(POEMS_FILE, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.json(JSON.parse(data));
+  });
 });
 
 app.listen(3000, function () {
