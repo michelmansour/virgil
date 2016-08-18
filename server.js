@@ -23,6 +23,33 @@ app.get('/api/poem', function (req, res) {
   });
 });
 
+app.post('/api/poem', function (req, res) {
+  fs.readFile(POEMS_FILE, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    var poems = JSON.parse(data);
+    // NOTE: In a real implementation, we would likely rely on a database or
+    // some other approach (e.g. UUIDs) to ensure a globally unique id. We'll
+    // treat Date.now() as unique-enough for our purposes.
+    var newPoem = {
+      id: Date.now(),
+      title: req.body.title,
+      author: req.body.author,
+      collection: req.body.collection
+    };
+    poems.push(newPoem);
+    fs.writeFile(POEMS_FILE, JSON.stringify(poems, null, 4), function (err) {
+      if (err) {
+        console.error(err);
+        process.exit(1);
+      }
+      res.json(poems);
+    });
+  });
+});
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });

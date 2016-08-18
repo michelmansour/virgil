@@ -39,10 +39,45 @@
           );
         }
       });
-      var data = [
-        {id: 1, title: 'foo', author: 'a'},
-        {id: 2, title: 'bar', author: 'b'}
-      ];
+      var PoemForm = React.createClass({
+        getInitialState: function () {
+          return {
+            title: '',
+            author: '',
+            collection: ''
+          };
+        },
+        handleTitleChange: function (e) {
+          this.setState({title: e.target.value});
+        },
+        handlePoetChange: function (e) {
+          this.setState({author: e.target.value});
+        },
+        handleCollectionChange: function (e) {
+          this.setState({collection: e.target.value});
+        },
+        handleSubmit: function (e) {
+          e.preventDefault();
+          var title = this.state.title.trim();
+          var author = this.state.author.trim();
+          var collection = this.state.collection.trim();
+          if (!title || !author) {
+            return;
+          }
+          this.props.onPoemSubmit({title: title, author: author, collection: collection});
+          this.setState({title: '', author: '', collection: ''});
+        },
+        render: function () {
+          return (
+            <form className="poemForm" onSubmit={this.handleSubmit}>
+              <input type="text" placeholder="Title..." value={this.state.title} onChange={this.handleTitleChange} />
+              <input type="text" placeholder="Poet..." value={this.state.author} onChange={this.handlePoetChange} />
+              <input type="text" placeholder="Collection..." value={this.state.collection} onChange={this.handleCollectionChange} />
+              <input type="submit" value="Post" />
+            </form>
+          );
+        }
+      });
       var PoemBox = React.createClass({
         getInitialState: function () {
           return {data: []};
@@ -60,6 +95,20 @@
             }.bind(this)
           })
         },
+        handlePoemSubmit: function (poem) {
+          $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            data: poem,
+            success: function(data) {
+              this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+              console.error(this.props.url, status, err.toString());
+            }.bind(this)
+          });
+        },
         componentDidMount: function () {
           this.loadPoems();
           setInterval(this.loadPoems, this.props.pollInterval);
@@ -69,6 +118,7 @@
             <div className="poemBox">
               <h1>Poem List</h1>
               <PoemList data={this.state.data} />
+              <PoemForm onPoemSubmit={this.handlePoemSubmit} />
             </div>
           );
         }
