@@ -1,14 +1,16 @@
 [
-  {
-    "id": 1,
-    "title": "Poem A",
-    "author": "Foo Bar",
-    "collection": "Leaves of Trees"
-  },
-  {
-    "id": 2,
-    "title": "The Modern Magus",
-    "author": "Bobby Arnold",
-    "collection": "Where the Sidewalk Starts"
-  }
+    {
+        "id": 1,
+        "title": "The God Who Only Knows Four Words",
+        "author": "Hafez",
+        "collection": "",
+        "text": "Every Child\nHas known God,\nNot the God of names,\nNot the God of Don'ts\nNot the God who ever does anything weird\nBut the God who only knows four words\nAnd keeps repeating them, saying:\n\"Come dance with Me\"\nCome Dance"
+    },
+    {
+        "id": 2,
+        "title": "The Modern Magus",
+        "author": "Bobby Arnold",
+        "collection": "Where the Sidewalk Starts",
+        "text": "This is\nNOT\na         poem."
+    }
 ]

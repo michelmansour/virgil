@@ -14,22 +14,40 @@
   <body>
     <div id="content"></div>
     <script type="text/babel">
+      var PoemLine = React.createClass({
+        render: function () {
+          return (
+            <div className="poemLine">
+              {this.props.line}
+            </div>
+          );
+        }
+      });
       var Poem = React.createClass({
         render: function () {
+          var poemLineNodes = this.props.poem.text.split(/\n/).map(function (line, index) {
+            return (
+              <PoemLine line={line} key={index} />
+            );
+          });
           return (
             <div className="poem">
               <h2 className="poemTitle">
-                {this.props.title}
+                {this.props.poem.title}
               </h2>
+              <p><em>by</em> {this.props.poem.author}</p>
+              <div className="poemText">
+                {poemLineNodes}
+              </div>
             </div>
-          )
+          );
         }
       });
       var PoemList = React.createClass({
         render: function () {
           var poemNodes = this.props.data.map(function (poem) {
             return (
-              <Poem title={poem.title} key={poem.id} />
+              <Poem poem={poem} key={poem.id} />
             );
           });
           return (
