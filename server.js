@@ -37,7 +37,8 @@ app.post('/api/poem', function (req, res) {
       id: Date.now(),
       title: req.body.title,
       author: req.body.author,
-      collection: req.body.collection
+      collection: req.body.collection,
+      text: req.body.text
     };
     poems.push(newPoem);
     fs.writeFile(POEMS_FILE, JSON.stringify(poems, null, 4), function (err) {

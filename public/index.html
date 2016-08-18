@@ -62,7 +62,8 @@
           return {
             title: '',
             author: '',
-            collection: ''
+            collection: '',
+            text: ''
           };
         },
         handleTitleChange: function (e) {
@@ -74,25 +75,35 @@
         handleCollectionChange: function (e) {
           this.setState({collection: e.target.value});
         },
+        handleTextChange: function (e) {
+          this.setState({text: e.target.value});
+        },
         handleSubmit: function (e) {
           e.preventDefault();
           var title = this.state.title.trim();
           var author = this.state.author.trim();
+          var text = this.state.text;
           var collection = this.state.collection.trim();
-          if (!title || !author) {
+          if (!title || !author || !text) {
             return;
           }
-          this.props.onPoemSubmit({title: title, author: author, collection: collection});
-          this.setState({title: '', author: '', collection: ''});
+          this.props.onPoemSubmit({title: title, author: author, collection: collection, text: text});
+          this.setState({title: '', author: '', collection: '', text: ''});
         },
         render: function () {
           return (
-            <form className="poemForm" onSubmit={this.handleSubmit}>
-              <input type="text" placeholder="Title..." value={this.state.title} onChange={this.handleTitleChange} />
-              <input type="text" placeholder="Poet..." value={this.state.author} onChange={this.handlePoetChange} />
-              <input type="text" placeholder="Collection..." value={this.state.collection} onChange={this.handleCollectionChange} />
-              <input type="submit" value="Post" />
-            </form>
+            <div className="poemFormDiv">
+              <h2>Contribute a Poem</h2>
+              <form className="poemForm" onSubmit={this.handleSubmit}>
+                <input type="text" placeholder="Title..." value={this.state.title} onChange={this.handleTitleChange} />
+                <input type="text" placeholder="Poet..." value={this.state.author} onChange={this.handlePoetChange} />
+                <input type="text" placeholder="Collection..." value={this.state.collection} onChange={this.handleCollectionChange} />
+                <div className="poemTextArea">
+                  <textarea rows="10" placeholder="Begin..." value={this.state.text} onChange={this.handleTextChange} />
+                </div>
+                <input type="submit" value="Post" />
+              </form>
+            </div>
           );
         }
       });
