@@ -13,4 +13,12 @@ npm install
 npm start
 ```
 
-Then navigate to localhost:3000
+Then build the client:
+
+```
+cd client
+npm install
+npm run build
+```
+
+Finally, navigate to localhost:3000
