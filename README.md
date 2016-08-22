@@ -17,10 +17,12 @@ npm start
 Then build the client:
 
 ```
-npm install -g browserify # if you don't already have it
+npm install -g browserify watchify # if you don't already have them
 cd client
 npm install
-npm run build
+npm run watch # for development mode
+# or
+npm run build # for production mode
 ```
 
 Finally, navigate to localhost:3000

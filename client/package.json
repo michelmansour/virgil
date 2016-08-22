@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify -t [ babelify --presets [ es2015 react ] ] src/index.js -o public/app.js",
-    "start": "node app.js"
+    "watch": "watchify -t [ babelify --presets [ es2015 react ] ] src/index.js -o public/app.js --debug --verbose"
   },
   "author": "",
   "license": "ISC",
