@@ -4,7 +4,8 @@ A delightful way to share, discuss, and annotate poetry.
 # Build and Run
 Virgil is written in Node and React.
 
-First make sure you have [nvm](https://github.com/creationix/nvm). Next:
+First make sure you have [Node](https://nodejs.org/) and [nvm](https://github.com/creationix/nvm). To build and start
+the server:
 
 ```
 nvm install
@@ -16,6 +17,7 @@ npm start
 Then build the client:
 
 ```
+npm install -g browserify # if you don't already have it
 cd client
 npm install
 npm run build
