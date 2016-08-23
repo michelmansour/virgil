@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "poemId": 1,
+        "author": "Han Solo",
+        "text": "First!"
+    },
+    {
+        "id": 2,
+        "poemId": 2,
+        "author": "William Shakespeare",
+        "text": "Nice work building the tension!"
+    }
+]
