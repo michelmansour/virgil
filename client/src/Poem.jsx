@@ -6,12 +6,14 @@ const PoemLine = ({ line }) => (
   </div>
 );
 
+PoemLine.propTypes = {
+  line: PropTypes.string,
+};
+
 const Poem = ({ poem }) => {
-  var poemLineNodes = poem.text.split(/\n/).map(function (line, index) {
-    return (
-      <PoemLine line={line} key={index} />
-    );
-  });
+  const poemLineNodes = poem.text.split(/\n/).map((line, index) => (
+    <PoemLine line={line} key={index} />
+  ));
   return (
     <div className="poem">
       <h2 className="poemTitle">
@@ -29,8 +31,8 @@ Poem.propTypes = {
   poem: PropTypes.shape({
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired
-  })
-}
+    text: PropTypes.string.isRequired,
+  }),
+};
 
 export default Poem;

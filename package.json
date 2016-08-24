@@ -8,7 +8,11 @@
     "start": "node server.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/michelmansour/virgil.git"
+  },
   "dependencies": {
     "body-parser": "1.15.2",
     "express": "4.14.0"

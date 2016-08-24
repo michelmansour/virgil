@@ -26,3 +26,6 @@ npm run build # for production mode
 ```
 
 Finally, navigate to localhost:3000
+
+# License
+MIT
