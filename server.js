@@ -13,8 +13,8 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-app.get('/api/poem', function (req, res) {
-  fs.readFile(POEMS_FILE, function (err, data) {
+app.get('/api/poem', (req, res) => {
+  fs.readFile(POEMS_FILE, (err, data) => {
     if (err) {
       console.error(err);
       process.exit(1);
@@ -26,7 +26,7 @@ app.get('/api/poem', function (req, res) {
 app.post('/api/poem', function (req, res) {
   if (req.body.poems && Array.isArray(req.body.poems)) {
     let poems = req.body.poems;
-    fs.writeFile(POEMS_FILE, JSON.stringify(poems, null, 4), function (err) {
+    fs.writeFile(POEMS_FILE, JSON.stringify(poems, null, 4), (err) => {
       if (err) {
         console.error(err);
         process.exit(1);
@@ -34,7 +34,7 @@ app.post('/api/poem', function (req, res) {
       res.json(poems);
     });
   } else {
-    fs.readFile(POEMS_FILE, function (err, data) {
+    fs.readFile(POEMS_FILE, (err, data) => {
       if (err) {
         console.error(err);
         process.exit(1);
@@ -48,7 +48,7 @@ app.post('/api/poem', function (req, res) {
         text: req.body.text
       };
       poems.push(newPoem);
-      fs.writeFile(POEMS_FILE, JSON.stringify(poems, null, 4), function (err) {
+      fs.writeFile(POEMS_FILE, JSON.stringify(poems, null, 4), (err) => {
         if (err) {
           console.error(err);
           process.exit(1);
