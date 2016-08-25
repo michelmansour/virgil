@@ -11,9 +11,10 @@ PoemLine.propTypes = {
 };
 
 const Poem = ({ poem }) => {
-  const poemLineNodes = poem.text.split(/\n/).map((line, index) => (
-    <PoemLine line={line} key={index} />
-  ));
+  const poemLineNodes = poem.text.split(/\n/).map((line, index) => {
+    const NBSP = '\u00A0'; // Unicode value for non-breaking space
+    return <PoemLine line={(line.trim().length === 0) ? NBSP : line} key={index} />;
+  });
   return (
     <div className="poem">
       <h2 className="poemTitle">
