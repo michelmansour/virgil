@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/michelmansour/virgil.svg?branch=master)](https://travis-ci.org/michelmansour/virgil)
+
 # Virgil (working title)
 A delightful way to share, discuss, and annotate poetry.
 
