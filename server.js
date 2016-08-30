@@ -7,7 +7,7 @@ var app = express();
 var POEMS_FILE = path.join(__dirname, 'poems.json');
 
 app.use('/', express.static(path.join(__dirname, 'client/public')));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
   res.send('Hello World!');

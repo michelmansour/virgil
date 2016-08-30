@@ -44,7 +44,8 @@ class PoemBox extends React.Component {
       url: this.props.url,
       dataType: 'json',
       type: 'POST',
-      data: poem,
+      contentType: 'application/json',
+      data: JSON.stringify(poem),
       success: (data) => {
         this.setState({ data });
       },
@@ -59,7 +60,8 @@ class PoemBox extends React.Component {
       url: this.props.url,
       dataType: 'json',
       type: 'POST',
-      data: { poems: this.state.data },
+      contentType: 'application/json',
+      data: JSON.stringify({ poems: this.state.data }),
       success: (data) => {
         this.setState({ data });
       },
