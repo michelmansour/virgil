@@ -3,16 +3,23 @@ import $ from 'jquery';
 import AddCommentForm from './AddCommentForm';
 import CommentList from './CommentList';
 
-class CommentBox extends React.Component {
+class CommentListContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = {
+      data: [],
+      intervalId: -1,
+    };
   }
 
   componentDidMount = () => {
     this.loadComments();
-    setInterval(this.loadComments, this.props.pollInterval);
-  }
+    this.state.intervalId = setInterval(this.loadComments, this.props.pollInterval);
+  };
+
+  componentWillUnmount = () => {
+    clearInterval(this.state.intervalId);
+  };
 
   loadComments = () => {
     $.ajax({
@@ -26,7 +33,7 @@ class CommentBox extends React.Component {
         console.error(this.props.url, status, err.toString());
       },
     });
-  }
+  };
 
   handleCommentSubmit = (comment) => {
     $.ajax({
@@ -53,9 +60,9 @@ class CommentBox extends React.Component {
   )
 }
 
-CommentBox.propTypes = {
+CommentListContainer.propTypes = {
   pollInterval: PropTypes.number.isRequired,
   url: PropTypes.string.isRequired,
 };
 
-export default CommentBox;
+export default CommentListContainer;

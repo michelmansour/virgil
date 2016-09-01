@@ -1,18 +1,21 @@
 import React, { PropTypes } from 'react';
-import Sortable from 'sortablejs';
 import $ from 'jquery';
+import Sortable from 'sortablejs';
 import PoemList from './PoemList';
 import AddPoemForm from './AddPoemForm';
 
-class PoemBox extends React.Component {
+class PoemListContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = {
+      data: [],
+      intervalId: -1,
+    };
   }
 
   componentDidMount = () => {
     this.loadPoems();
-    setInterval(this.loadPoems, this.props.pollInterval);
+    this.state.intervalId = setInterval(this.loadPoems, this.props.route.pollInterval);
     const el = document.getElementById('mainPoemList');
     Sortable.create(el, {
       onUpdate: (evt) => {
@@ -25,23 +28,27 @@ class PoemBox extends React.Component {
     });
   }
 
+  componentWillUnmount = () => {
+    clearInterval(this.state.intervalId);
+  }
+
   loadPoems = () => {
     $.ajax({
-      url: this.props.url,
+      url: this.props.route.url,
       dataType: 'json',
       cache: false,
       success: (data) => {
         this.setState({ data });
       },
       error: (xhr, status, err) => {
-        console.error(this.props.url, status, err.toString());
+        console.error(this.props.route.url, status, err.toString());
       },
     });
   }
 
   handlePoemSubmit = (poem) => {
     $.ajax({
-      url: this.props.url,
+      url: this.props.route.url,
       dataType: 'json',
       type: 'POST',
       contentType: 'application/json',
@@ -50,14 +57,14 @@ class PoemBox extends React.Component {
         this.setState({ data });
       },
       error: (xhr, status, err) => {
-        console.error(this.props.url, status, err.toString());
+        console.error(this.props.route.url, status, err.toString());
       },
     });
   }
 
   savePoems = () => {
     $.ajax({
-      url: this.props.url,
+      url: this.props.route.url,
       dataType: 'json',
       type: 'POST',
       contentType: 'application/json',
@@ -66,7 +73,7 @@ class PoemBox extends React.Component {
         this.setState({ data });
       },
       error: (xhr, status, err) => {
-        console.error(this.props.url, status, err.toString());
+        console.error(this.props.route.url, status, err.toString());
       },
     });
   }
@@ -80,9 +87,11 @@ class PoemBox extends React.Component {
   )
 }
 
-PoemBox.propTypes = {
-  pollInterval: PropTypes.number.isRequired,
-  url: PropTypes.string.isRequired,
+PoemListContainer.propTypes = {
+  route: PropTypes.shape({
+    pollInterval: PropTypes.number.isRequired,
+    url: PropTypes.string.isRequired,
+  }),
 };
 
-export default PoemBox;
+export default PoemListContainer;

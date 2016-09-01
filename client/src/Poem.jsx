@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import CommentBox from './CommentBox';
 
 const PoemLine = ({ line }) => (
   <div className="poemLine">
@@ -25,8 +24,6 @@ const Poem = ({ poem }) => {
       <div className="poemText">
         {poemLineNodes}
       </div>
-      <CommentBox url={`/api/comments/${poem.id}`} pollInterval={2000} />
-      <hr />
     </div>
   );
 };
