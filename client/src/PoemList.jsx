@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
-import Poem from './Poem';
+import PoemSummary from './PoemSummary';
 
 const PoemList = ({ data }) => {
   const poemNodes = data.map((poem) => (
-    <Poem poem={poem} key={poem.id} />
+    <PoemSummary poem={poem} key={poem.id} />
   ));
   return (
     <div className="poemList" id="mainPoemList">
@@ -13,7 +13,7 @@ const PoemList = ({ data }) => {
 };
 
 PoemList.propTypes = {
-  data: PropTypes.arrayOf(Poem.propTypes.poem).isRequired,
+  data: PropTypes.arrayOf(PoemSummary.propTypes.poem).isRequired,
 };
 
 export default PoemList;

@@ -11,10 +11,6 @@ const POEMS_FILE = path.join(__dirname, 'poems.json');
 app.use('/', express.static(path.join(__dirname, 'client/public')));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
 const commentFilter = (poemId) => (comment) => comment.poemId === parseInt(poemId, 10);
 
 app.get('/api/comments/:poemId', (req, res) => {
@@ -64,6 +60,18 @@ app.get('/api/poem', (req, res) => {
   });
 });
 
+app.get('/api/poem/:poemId', (req, res) => {
+  fs.readFile(POEMS_FILE, (err, data) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    const poems = JSON.parse(data);
+    const targetPoem = poems.filter((poem) => poem.id === parseInt(req.params.poemId, 10))[0];
+    res.json(targetPoem);
+  });
+});
+
 app.post('/api/poem', (req, res) => {
   if (req.body.poems && Array.isArray(req.body.poems)) {
     const poems = req.body.poems;
@@ -98,6 +106,10 @@ app.post('/api/poem', (req, res) => {
       });
     });
   }
+});
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './client/public/index.html'));
 });
 
 app.listen(3000, () => {
