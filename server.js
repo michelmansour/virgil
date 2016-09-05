@@ -2,14 +2,37 @@ const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 
 const app = express();
 
 const COMMENTS_FILE = path.join(__dirname, 'comments.json');
 const POEMS_FILE = path.join(__dirname, 'poems.json');
+const USERS_FILE = path.join(__dirname, 'users.json');
 
 app.use('/', express.static(path.join(__dirname, 'client/public')));
 app.use(bodyParser.json());
+app.use('/api', expressJwt({ secret: 'secret' }));
+
+app.post('/login', (req, res) => {
+  fs.readFile(USERS_FILE, (err, data) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    const users = JSON.parse(data);
+    const targetUser = users.filter((user) => user.username === req.body.username)[0];
+
+    if (!targetUser || targetUser.password !== req.body.password) {
+      res.status(401).send('Bad login');
+      return;
+    }
+    const token = jwt.sign(targetUser, 'secret', { expiresIn: '1h' });
+
+    res.json({ token });
+  });
+});
 
 const commentFilter = (poemId) => (comment) => comment.poemId === parseInt(poemId, 10);
 

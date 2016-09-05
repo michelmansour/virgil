@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import $ from 'jquery';
 import Sortable from 'sortablejs';
+import { requestWithAuth } from './auth';
 import PoemList from './PoemList';
 import AddPoemForm from './AddPoemForm';
 
@@ -33,7 +33,7 @@ class PoemListContainer extends React.Component {
   }
 
   loadPoems = () => {
-    $.ajax({
+    requestWithAuth({
       url: this.props.route.url,
       dataType: 'json',
       cache: false,
@@ -47,7 +47,7 @@ class PoemListContainer extends React.Component {
   }
 
   handlePoemSubmit = (poem) => {
-    $.ajax({
+    requestWithAuth({
       url: this.props.route.url,
       dataType: 'json',
       type: 'POST',
@@ -63,7 +63,7 @@ class PoemListContainer extends React.Component {
   }
 
   savePoems = () => {
-    $.ajax({
+    requestWithAuth({
       url: this.props.route.url,
       dataType: 'json',
       type: 'POST',

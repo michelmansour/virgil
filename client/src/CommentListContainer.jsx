@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import $ from 'jquery';
+import { requestWithAuth } from './auth';
 import AddCommentForm from './AddCommentForm';
 import CommentList from './CommentList';
 
@@ -22,7 +22,7 @@ class CommentListContainer extends React.Component {
   };
 
   loadComments = () => {
-    $.ajax({
+    requestWithAuth({
       url: this.props.url,
       dataType: 'json',
       cache: false,
@@ -36,7 +36,7 @@ class CommentListContainer extends React.Component {
   };
 
   handleCommentSubmit = (comment) => {
-    $.ajax({
+    requestWithAuth({
       url: this.props.url,
       dataType: 'json',
       type: 'POST',

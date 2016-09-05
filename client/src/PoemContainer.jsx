@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import $ from 'jquery';
+import { requestWithAuth } from './auth';
 import Poem from './Poem';
 import CommentListContainer from './CommentListContainer';
 
@@ -23,7 +23,7 @@ class PoemContainer extends React.Component {
 
   fetchPoem = () => {
     const fetchPoemUrl = `/api/poem/${this.props.params.poemId}`;
-    $.ajax({
+    requestWithAuth({
       url: fetchPoemUrl,
       dataType: 'json',
       cache: false,
