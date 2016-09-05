@@ -4,4 +4,5 @@ install:
     - npm install -g browserify
     - cd client && npm install && cd ..
 script:
+    - npm run lint
     - cd client && npm run lint && npm run build
