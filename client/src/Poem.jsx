@@ -20,7 +20,7 @@ const Poem = ({ poem }) => {
       <h2 className="poemTitle">
         {poem.title}
       </h2>
-      <p><em>by</em> {poem.author}</p>
+      <p className="byLine"><em>by</em> {poem.author}</p>
       <div className="poemText">
         {poemLineNodes}
       </div>
