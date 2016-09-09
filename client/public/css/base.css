@@ -1,3 +1,29 @@
 .poemText {
     white-space: pre;
 }
+
+@media print {
+    body * {
+        visibility: hidden;
+        font-family: Georgia, serif;
+        background: none;
+        color: black;
+    }
+    .poem * {
+        visibility: visible;
+    }
+    .poem {
+        height: auto;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+    }
+    .poemTitle, .byLine {
+        position: relative;
+        text-align: center;
+    }
+}
