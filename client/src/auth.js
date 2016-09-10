@@ -57,7 +57,7 @@ function requireAuth(nextState, replace) {
 }
 
 function requestWithAuth(ajaxConfig) {
-  $.ajax({
+  return $.ajax({
     headers: { Authorization: `Bearer ${sessionStorage.token}` },
     ...ajaxConfig,
   });

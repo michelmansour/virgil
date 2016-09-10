@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import Sortable from 'sortablejs';
 import { requestWithAuth } from './auth';
 import PoemList from './PoemList';
-import AddPoemForm from './AddPoemForm';
 
 class PoemListContainer extends React.Component {
   constructor(props) {
@@ -34,7 +33,7 @@ class PoemListContainer extends React.Component {
 
   loadPoems = () => {
     requestWithAuth({
-      url: this.props.route.url,
+      url: `${this.props.route.url}/poem`,
       dataType: 'json',
       cache: false,
       success: (data) => {
@@ -46,25 +45,9 @@ class PoemListContainer extends React.Component {
     });
   }
 
-  handlePoemSubmit = (poem) => {
-    requestWithAuth({
-      url: this.props.route.url,
-      dataType: 'json',
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(poem),
-      success: (data) => {
-        this.setState({ data });
-      },
-      error: (xhr, status, err) => {
-        console.error(this.props.route.url, status, err.toString());
-      },
-    });
-  }
-
   savePoems = () => {
     requestWithAuth({
-      url: this.props.route.url,
+      url: `${this.props.route.url}/poem`,
       dataType: 'json',
       type: 'POST',
       contentType: 'application/json',
@@ -80,9 +63,7 @@ class PoemListContainer extends React.Component {
 
   render = () => (
     <div className="poemBox">
-      <h1>Poem List</h1>
       <PoemList data={this.state.data} />
-      <AddPoemForm onPoemSubmit={this.handlePoemSubmit} />
     </div>
   )
 }

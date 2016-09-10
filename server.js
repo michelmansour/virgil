@@ -4,12 +4,14 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
+const _ = require('lodash');
 
 const app = express();
 
 const COMMENTS_FILE = path.join(__dirname, 'comments.json');
 const POEMS_FILE = path.join(__dirname, 'poems.json');
 const USERS_FILE = path.join(__dirname, 'users.json');
+const SESSIONS_FILE = path.join(__dirname, 'sessions.json');
 
 app.use('/', express.static(path.join(__dirname, 'client/public')));
 app.use(bodyParser.json());
@@ -69,6 +71,78 @@ app.post('/api/comments/:poemId', (req, res) => {
       }
       const poemComments = comments.filter(commentFilter(req.params.poemId));
       res.json(poemComments);
+    });
+  });
+});
+
+app.get('/api/session', (req, res) => {
+  fs.readFile(SESSIONS_FILE, (err, data) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.json(JSON.parse(data));
+  });
+});
+
+const getSessionPoemSummaries = (poemIds, poems) =>
+  poemIds.map((poemId) => _.chain(poems)
+                           .filter((poem) => poem.id === parseInt(poemId, 10))
+                           .head()
+                           .pick(['id', 'title', 'author'])
+                           .value());
+
+
+app.get('/api/session/active', (req, res) => {
+  fs.readFile(SESSIONS_FILE, (err, data) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    const activeSession = JSON.parse(data)[0];
+    fs.readFile(POEMS_FILE, (poemsErr, poemsData) => {
+      if (poemsErr) {
+        console.error(err);
+        process.exit(1);
+      }
+      const allPoems = JSON.parse(poemsData);
+      activeSession.poems = getSessionPoemSummaries(activeSession.poems, allPoems);
+      res.json(activeSession);
+    });
+  });
+});
+
+const startNewSession = (sessions, poems) => {
+  const activeSession = Object.assign(sessions[0]);
+  activeSession.status = 'CLOSED';
+  return [{
+    id: Date.now(),
+    startDate: Date.now(),
+    endDate: 0,
+    status: 'ACTIVE',
+    poems: poems || [],
+  }].concat(activeSession, sessions.slice(1));
+};
+
+app.put('/api/session/', (req, res) => {
+  fs.readFile(SESSIONS_FILE, (err, data) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    let sessions = JSON.parse(data);
+    const paramSession = req.body.session;
+    if (!paramSession.id) { // the previous session has been closed
+      sessions = startNewSession(sessions, paramSession.poems);
+    } else { // the only other supported update is poems added or reordered
+      sessions[0].poems = paramSession.poems;
+    }
+    fs.writeFile(SESSIONS_FILE, JSON.stringify(sessions, null, 4), (writeErr) => {
+      if (writeErr) {
+        console.error(writeErr);
+        process.exit(1);
+      }
+      res.json(sessions);
     });
   });
 });
