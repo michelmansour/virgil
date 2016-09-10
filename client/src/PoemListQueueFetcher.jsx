@@ -2,54 +2,48 @@ import React, { PropTypes } from 'react';
 import { requestWithAuth } from './auth';
 import PoemSummaryFetcher from './PoemSummaryFetcher';
 
-class ActiveSessionPoemListContainer extends React.Component {
+class PoemListQueueFetcher extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      session: {
-        poems: [],
-      },
+      queue: [],
       intervalId: -1,
     };
   }
 
   componentDidMount = () => {
-    this.loadActiveSession();
-    this.state.intervalId = setInterval(this.loadActiveSession, this.props.route.pollInterval);
+    this.loadQueue();
+    this.state.intervalId = setInterval(this.loadQueue, this.props.route.pollInterval);
   }
 
   componentWillUnmount = () => {
     clearInterval(this.state.intervalId);
   }
 
-  loadActiveSession = () => {
+  loadQueue = () => {
     requestWithAuth({
-      url: `${this.props.route.url}/session`,
+      url: `${this.props.route.url}/queue`,
       dataType: 'json',
       cache: false,
       success: (data) => {
-        this.setState({ session: data[0] });
+        this.setState({ queue: data[0].queue });
       },
       error: (xhr, status, err) => {
-        console.error(`${this.props.route.url}/session`, status, err.toString());
+        console.error(this.props.route.url, status, err.toString());
       },
+
     });
   }
 
-  saveSession = (poems) => {
+  saveQueue = (queue) => {
     requestWithAuth({
-      url: `${this.props.route.url}/session`,
+      url: `${this.props.route.url}/queue`,
       dataType: 'json',
-      type: 'PUT',
+      type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({
-        session: {
-          ...this.state.session,
-          poems,
-        },
-      }),
+      data: JSON.stringify({ queue }),
       success: (data) => {
-        this.setState({ session: data });
+        this.setState({ queue: data });
       },
       error: (xhr, status, err) => {
         console.error(this.props.route.url, status, err.toString());
@@ -59,19 +53,19 @@ class ActiveSessionPoemListContainer extends React.Component {
 
   render = () => (
     <PoemSummaryFetcher
-      listId="sessionList"
-      queue={this.state.session.poems}
-      saveQueue={this.saveSession}
+      listId="queueList"
+      queue={this.state.queue}
+      saveQueue={this.saveQueue}
       route={this.props.route}
     />
   )
 }
 
-ActiveSessionPoemListContainer.propTypes = {
+PoemListQueueFetcher.propTypes = {
   route: PropTypes.shape({
     pollInterval: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
 };
 
-export default ActiveSessionPoemListContainer;
+export default PoemListQueueFetcher;

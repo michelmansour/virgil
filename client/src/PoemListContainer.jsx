@@ -1,74 +1,68 @@
 import React, { PropTypes } from 'react';
-import Sortable from 'sortablejs';
+import Sortable from 'react-sortablejs';
 import { requestWithAuth } from './auth';
-import PoemList from './PoemList';
+import PoemSummary from './PoemSummary';
 
 class PoemListContainer extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      poemSummaries: [],
       intervalId: -1,
     };
   }
 
   componentDidMount = () => {
-    this.loadPoems();
-    this.state.intervalId = setInterval(this.loadPoems, this.props.route.pollInterval);
-    const el = document.getElementById('mainPoemList');
-    Sortable.create(el, {
-      onUpdate: (evt) => {
-        const reordering = this.state.data.slice();
-        const movedPoem = reordering.splice(evt.oldIndex, 1);
-        reordering.splice(evt.newIndex, 0, ...movedPoem);
-        this.setState({ data: reordering });
-        this.savePoems();
-      },
-    });
+    this.loadPoemSummaries();
+    this.state.intervalId = setInterval(this.loadPoemSummaries, this.props.route.pollInterval);
   }
 
   componentWillUnmount = () => {
     clearInterval(this.state.intervalId);
   }
 
-  loadPoems = () => {
-    requestWithAuth({
-      url: `${this.props.route.url}/poem`,
-      dataType: 'json',
-      cache: false,
-      success: (data) => {
-        this.setState({ data });
-      },
-      error: (xhr, status, err) => {
-        console.error(this.props.route.url, status, err.toString());
-      },
-    });
+  loadPoemSummaries = () => {
+    Promise.all(this.props.poems.map(poemId =>
+      requestWithAuth({
+        url: `${this.props.route.url}/poem/${poemId}`,
+        dataType: 'json',
+        cache: false,
+        success: data => data,
+        error: (xhr, status, err) => {
+          console.error(`${this.props.route.url}/poem/${poemId}`, status, err.toString());
+        },
+      }))).then(poemSummaries => this.setState({ poemSummaries }));
   }
 
-  savePoems = () => {
-    requestWithAuth({
-      url: `${this.props.route.url}/poem`,
-      dataType: 'json',
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({ poems: this.state.data }),
-      success: (data) => {
-        this.setState({ data });
-      },
-      error: (xhr, status, err) => {
-        console.error(this.props.route.url, status, err.toString());
-      },
-    });
+  render = () => {
+    const poemNodes = this.state.poemSummaries.map(poem => (
+      <PoemSummary poem={poem} key={poem.id} data-id={poem.id} />
+    ));
+    return (
+      <div className="poemBox">
+        <Sortable
+          options={{
+            group: 'poem-target',
+          }}
+          onChange={(order) => {
+            const orderMap = {};
+            order.forEach((poemId, i) => {
+              orderMap[poemId] = i;
+            });
+            this.props.saveQueue(orderMap);
+          }}
+        >
+          {poemNodes}
+        </Sortable>
+      </div>
+    );
   }
-
-  render = () => (
-    <div className="poemBox">
-      <PoemList data={this.state.data} />
-    </div>
-  )
 }
 
 PoemListContainer.propTypes = {
+  poems: PropTypes.arrayOf(PropTypes.number).isRequired,
+  saveQueue: PropTypes.func.isRequired,
   route: PropTypes.shape({
     pollInterval: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
