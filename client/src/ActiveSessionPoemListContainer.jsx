@@ -43,7 +43,7 @@ class ActiveSessionPoemListContainer extends React.Component {
       url: `${this.props.route.url}/session/active`,
       dataType: 'json',
       cache: false,
-      success: (data) => this.setState({ session: data }),
+      success: data => this.setState({ session: data }),
       error: (xhr, status, err) => console.error(`${this.props.route.url}/session/active`, status, err.toString()),
     });
   }
@@ -57,7 +57,7 @@ class ActiveSessionPoemListContainer extends React.Component {
       data: JSON.stringify({
         session: {
           ...this.state.session,
-          poems: this.state.session.poems.map((p) => p.id),
+          poems: this.state.session.poems.map(p => p.id),
         },
       }),
       success: this.loadActiveSession,
@@ -76,7 +76,7 @@ ActiveSessionPoemListContainer.propTypes = {
   route: PropTypes.shape({
     pollInterval: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
 };
 
 export default ActiveSessionPoemListContainer;

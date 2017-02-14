@@ -45,7 +45,9 @@ class PoemContainer extends React.Component {
 }
 
 PoemContainer.propTypes = {
-  params: PropTypes.object.isRequired,
+  params: PropTypes.objectOf({
+    poemId: PropTypes.number,
+  }).isRequired,
 };
 
 export default PoemContainer;

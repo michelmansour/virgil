@@ -37,7 +37,7 @@ Home.propTypes = {
   route: PropTypes.shape({
     pollInterval: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
 };
 
 export default Home;

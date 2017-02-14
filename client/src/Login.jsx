@@ -33,11 +33,7 @@ class Login extends React.Component {
         this.setState({ error: true });
       } else {
         const { location } = this.props;
-        if (location.state && location.state.nextPathname) {
-          this.context.router.replace(location.state.nextPathname);
-        } else {
-          this.context.router.replace('/');
-        }
+        this.context.router.replace(location.state.nextPathname);
       }
     });
   }
@@ -65,7 +61,19 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  location: PropTypes.object,
+  location: PropTypes.objectOf({
+    state: PropTypes.shape({
+      nextPathname: PropTypes.string,
+    }),
+  }),
+};
+
+Login.defaultProps = {
+  location: {
+    state: {
+      nextPathname: '/',
+    },
+  },
 };
 
 Login.contextTypes = {

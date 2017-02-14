@@ -13,7 +13,7 @@ Comment.propTypes = {
   comment: PropTypes.shape({
     author: PropTypes.string.isRequired,
     text: PropTypes.string.isrequired,
-  }),
+  }).isRequired,
 };
 
 export default Comment;
