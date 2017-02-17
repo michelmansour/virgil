@@ -41,24 +41,21 @@ class AddPoemForm extends React.Component {
   }
 
   render = () => (
-    <div className="poemFormDiv">
-      <h2>Contribute a Poem</h2>
-      <form className="poemForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Title..." value={this.state.title} onChange={this.handleTitleChange} />
-        <input type="text" placeholder="Poet..." value={this.state.author} onChange={this.handlePoetChange} />
-        <input
-          type="text"
-          placeholder="Collection..."
-          value={this.state.collection}
-          onChange={this.handleCollectionChange}
-        />
-        <div className="poemTextArea">
-          <textarea rows="10" placeholder="Begin..." value={this.state.text} onChange={this.handleTextChange} />
-        </div>
-        <input type="submit" value="Post" />
-      </form>
-    </div>
-  );
+    <form className="poemForm" onSubmit={this.handleSubmit}>
+      <input type="text" placeholder="Title..." value={this.state.title} onChange={this.handleTitleChange} />
+      <input type="text" placeholder="Poet..." value={this.state.author} onChange={this.handlePoetChange} />
+      <input
+        type="text"
+        placeholder="Collection..."
+        value={this.state.collection}
+        onChange={this.handleCollectionChange}
+      />
+      <div className="poemTextArea">
+        <textarea rows="10" placeholder="Begin..." value={this.state.text} onChange={this.handleTextChange} />
+      </div>
+      <input type="submit" value="Post" />
+    </form>
+  )
 }
 
 AddPoemForm.propTypes = {
