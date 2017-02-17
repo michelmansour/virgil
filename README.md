@@ -12,19 +12,19 @@ the server:
 ```
 nvm install
 nvm use
-npm install
-npm start
+yarn install
+yarn start
 ```
 
 Then build the client:
 
 ```
-npm install -g browserify watchify # if you don't already have them
+yarn global add browserify watchify # if you don't already have them
 cd client
-npm install
-npm run watch # for development mode
+yarn install
+yarn run watch # for development mode
 # or
-npm run build # for production mode
+yarn run build # for production mode
 ```
 
 Finally, navigate to localhost:3000
