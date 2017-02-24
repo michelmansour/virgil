@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import PoemSummary from './PoemSummary';
 
 const PoemList = ({ data }) => {
-  const poemNodes = data.map((poem) => (
+  const poemNodes = data.map(poem => (
     <PoemSummary poem={poem} key={poem.id} />
   ));
   return (

@@ -9,6 +9,13 @@
       "ignoreUrls": true,
       "ignoreComments": false
     }],
-    "no-console": ["error", { "allow": ["warn", "error"] }]
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "exports": "always-multiline",
+      "imports": "always-multiline",
+      "objects": "always-multiline",
+      "functions": "never"
+    }]
   }
 }

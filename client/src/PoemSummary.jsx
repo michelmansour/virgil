@@ -14,7 +14,7 @@ PoemSummary.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
 };
 
 export default PoemSummary;
